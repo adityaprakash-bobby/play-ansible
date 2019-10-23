@@ -58,4 +58,4 @@
 
     - name: Create the default.conf for MySQL
       template: src=templates/mysql/default.conf dest=/home/aditya/Documenrs/play-ansible/.default.conf
-      when: mysql_new_root_password.changed      
+      when: mysql_new_root_password.changed
