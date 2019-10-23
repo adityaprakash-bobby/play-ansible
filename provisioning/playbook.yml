@@ -23,3 +23,31 @@
     
     - name: Remove apache
       apt: name=apache2 state=removed
+
+    # Install MySQL
+    - name: Install MySQL
+      apt: name={{item}} state=installed
+      with_items:
+        - mysql-server-5.6
+        - python-mysqld
+    
+    - name: Generate new root password
+      command: openssl rand -hex 7
+      register: mysql_new_root_pass
+    
+    - name: Remove anonynous users
+      mysql_user: name="" state=absent
+
+    - name: Remove test database
+      mysql_db: name=test state=absent
+    
+    - name: Update root password
+      mysql_user: name=root host={{item}} password={{mysql_new_root_password.stdout}}
+      with_items:
+        - "{{ ansible_hostname }}"
+        - 127.0.0.1
+        - ::1
+        - localhost
+
+    - name: Output the new password
+      debug: msg="New root password: {{mysql_new_root_password.stdout}}"
