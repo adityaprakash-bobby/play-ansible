@@ -59,3 +59,10 @@
     - name: Create the default.conf for MySQL
       template: src=templates/mysql/default.conf dest=/home/aditya/Documenrs/play-ansible/.default.conf
       when: mysql_new_root_password.changed
+    
+    # Install Nginx to serve the PHP application
+    - name: Install Nginx
+      apt: name=nginx state=installed
+    
+    - name: Start Nginx
+      service: name=nginx state=running
