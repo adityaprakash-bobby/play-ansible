@@ -32,14 +32,16 @@
         - python-mysqld
     
     - name: Generate new root password
-      command: openssl rand -hex 7
+      command: openssl rand -hex 7 creates=/home/aditya/Documenrs/play-ansible/.default.conf
       register: mysql_new_root_pass
     
     - name: Remove anonynous users
       mysql_user: name="" state=absent
+      when: mysql_new_root_password.changed
 
     - name: Remove test database
       mysql_db: name=test state=absent
+      when: mysql_new_root_password.changed
     
     - name: Update root password
       mysql_user: name=root host={{item}} password={{mysql_new_root_password.stdout}}
@@ -48,6 +50,12 @@
         - 127.0.0.1
         - ::1
         - localhost
+      when: mysql_new_root_password.changed
 
     - name: Output the new password
-      debug: msg="New root password: {{mysql_new_root_password.stdout}}"
+      debug: msg="New root password is {{mysql_new_root_password.stdout}}"
+      when: mysql_new_root_password.changed
+
+    - name: Create the default.conf for MySQL
+      template: src=templates/mysql/default.conf dest=/home/aditya/Documenrs/play-ansible/.default.conf
+      when: mysql_new_root_password.changed      
