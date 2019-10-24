@@ -33,6 +33,7 @@
       with_items:
         - mysql-server
         - python-mysqldb
+        - python-pymysql
     
     - name: Generate new root password
       command: openssl rand -hex 7 creates=/root/.default.conf
