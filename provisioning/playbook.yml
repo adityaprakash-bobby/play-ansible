@@ -5,6 +5,9 @@
     - name: "Ping machine"
       ping:
 
+    - name: Install software-properties-common
+      apt: name=software-properties-common state=installed
+
     # Add ppa for installing PHP 7
     - name: Add the ondrej PHP PPA
       apt_repository: repo='ppa:ondrej/php' 
@@ -28,14 +31,14 @@
     - name: Install MySQL
       apt: name={{item}} state=installed
       with_items:
-        - mysql-server-5.6
-        - python-mysqld
+        - mysql-server
+        - python-mysqldb
     
     - name: Generate new root password
-      command: openssl rand -hex 7 creates=/home/aditya/Documenrs/play-ansible/.default.conf
-      register: mysql_new_root_pass
+      command: openssl rand -hex 7 creates=/root/.default.conf
+      register: mysql_new_root_password
     
-    - name: Remove anonynous users
+    - name: Remove anonymous users
       mysql_user: name="" state=absent
       when: mysql_new_root_password.changed
 
@@ -55,14 +58,17 @@
     - name: Output the new password
       debug: msg="New root password is {{mysql_new_root_password.stdout}}"
       when: mysql_new_root_password.changed
-
+      
     - name: Create the default.conf for MySQL
-      template: src=templates/mysql/default.conf dest=/home/aditya/Documenrs/play-ansible/.default.conf
+      template: src=templates/mysql/default.conf dest=/root/.default.conf
       when: mysql_new_root_password.changed
     
-    # Install Nginx to serve the PHP application
+      # Install Nginx to serve the PHP application
     - name: Install Nginx
       apt: name=nginx state=installed
     
     - name: Start Nginx
-      service: name=nginx state=running
+      service: name=nginx state=started
+
+    # - name: Create nginx config
+    #   template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
