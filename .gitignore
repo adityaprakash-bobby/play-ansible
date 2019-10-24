@@ -3,4 +3,5 @@
 __pycache__/
 virtualenv/
 
-.deafult.conf
+# logs
+ubuntu-xenial-16.04-cloudimg-console.log
