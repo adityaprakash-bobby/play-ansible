@@ -74,6 +74,19 @@
     - name: Create nginx config
       template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
       notify: Restart Nginx
+    
+    # Wordpress Installation
+    - name: copy wordpress.zip into tmp
+      copy: src=files/wordpress.zip dest=/tmp/wordpress.zip
+    
+    - name: Install required tools
+      apt:
+        name: unzip
+        state: installed
+    
+    - name: Extract/unzip wordpress.zip
+      unarchive: src=/tmp/wordpress.zip dest=/tmp copy=no creates=/tmp/wordpress/wp-settings.php
+
 
   handlers:
     - name: Restart Nginx
