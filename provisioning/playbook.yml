@@ -71,5 +71,5 @@
     - name: Start Nginx
       service: name=nginx state=started
 
-    # - name: Create nginx config
-    #   template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
+    - name: Create nginx config
+      template: src=templates/nginx/default dest=/etc/nginx/sites-available/default
