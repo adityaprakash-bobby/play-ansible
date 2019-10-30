@@ -40,15 +40,25 @@
       register: mysql_new_root_password
     
     - name: Remove anonymous users
-      mysql_user: name="" state=absent
+      mysql_user: 
+        name: ""
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
       when: mysql_new_root_password.changed
 
     - name: Remove test database
-      mysql_db: name=test state=absent
+      mysql_db: 
+        name: test 
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
       when: mysql_new_root_password.changed
     
     - name: Update root password
-      mysql_user: name=root host={{item}} password={{mysql_new_root_password.stdout}}
+      mysql_user: 
+        name: root 
+        host: "{{ item }}" 
+        password: "{{mysql_new_root_password.stdout}}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
       with_items:
         - "{{ ansible_hostname }}"
         - 127.0.0.1
