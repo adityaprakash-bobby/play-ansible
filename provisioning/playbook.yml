@@ -36,7 +36,7 @@
         - python-pymysql
     
     - name: Generate new root password
-      command: openssl rand -hex 7 creates=/root/.default.conf
+      command: openssl rand -hex 7 creates=/root/.my.cnf
       register: mysql_new_root_password
     
     - name: Remove anonymous users
@@ -71,7 +71,7 @@
       when: mysql_new_root_password.changed
       
     - name: Create the default.conf for MySQL
-      template: src=templates/mysql/default.conf dest=/root/.default.conf
+      template: src=templates/mysql/default.conf dest=/root/.my.cnf
       when: mysql_new_root_password.changed
     
       # Install Nginx to serve the PHP application
@@ -97,6 +97,31 @@
     - name: Extract/unzip wordpress.zip
       unarchive: src=/tmp/wordpress.zip dest=/tmp copy=no creates=/tmp/wordpress/wp-settings.php
 
+    # Create project folder
+    - name: Create folder for website
+      file:
+        dest: /var/www/book.example.com
+        state: directory
+    
+    - name: Copy contents to the project folder
+      command: cp -a /tmp/wordpress/. /var/www/book.example.com/ creates=/var/www/book.example.com/wp-settings.php
+
+    # Create wordpress mysql database and user
+    - name: Create wordpress mysql database
+      mysql_db:
+        name: wordpress
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+    
+    - name: Create wordpress mysql user
+      mysql_user:
+        name: wordpress
+        password: bananas
+        priv: wordpress.*:ALL
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create wp-config
+      template: src=templates/wordpress/wp-config.php dest=/var/www/book.example.com/wp-config.php 
 
   handlers:
     - name: Restart Nginx
