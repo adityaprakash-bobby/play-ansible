@@ -2,9 +2,6 @@
 - hosts: all
   become: true
   roles:
-    - adityaprakash_bobby.ansible_role_php
-    - adityaprakash_bobby.ansible_role_mysql
-    - adityaprakash_bobby.ansible_role_nginx
     - adityaprakash_bobby.ansible_role_wordpress
   tasks:
     - name: Ping the machine
