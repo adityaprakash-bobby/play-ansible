@@ -6,6 +6,7 @@
       database_name: wordpress
       database_user: wordpress
       database_password: bananas6705
+      wp_domain: book.example.com
 
   tasks:
     - name: Ping the machine
