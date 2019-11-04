@@ -2,7 +2,11 @@
 - hosts: all
   become: true
   roles:
-    - adityaprakash_bobby.ansible_role_wordpress
+    - role: adityaprakash_bobby.ansible_role_wordpress
+      database_name: wordpress
+      database_user: wordpress
+      database_password: bananas6705
+
   tasks:
     - name: Ping the machine
       ping:
