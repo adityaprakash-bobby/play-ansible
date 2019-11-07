@@ -7,6 +7,10 @@
       database_user: wordpress
       database_password: bananas6705
       wp_domain: book.example.com
+      initial_post_title: Hey There
+      initial_post_content: >
+        This is an example content for the site.
+        Change it as you like.
 
   tasks:
     - name: Ping the machine
