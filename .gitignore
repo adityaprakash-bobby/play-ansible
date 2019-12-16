@@ -12,3 +12,7 @@ provisioning/files/wp-database.sql
 
 # Ignore roles
 provisioning/roles
+
+# Gem packages
+vendor/
+.bundle/
