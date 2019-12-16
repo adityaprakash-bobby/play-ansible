@@ -10,9 +10,6 @@ ubuntu-xenial-16.04-cloudimg-console.log
 provisioning/templates/wordpress/wp-config.php
 provisioning/files/wp-database.sql
 
-# Ignore roles
-provisioning/roles
-
 # Gem packages
 vendor/
 .bundle/

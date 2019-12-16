@@ -1,0 +1,12 @@
+---
+# tasks file for nginx
+# Install Nginx to serve the PHP application
+- name: Install Nginx
+  apt: name=nginx state=present
+
+- name: Start Nginx
+  service: name=nginx state=started
+
+- name: Create nginx config
+  template: src=default dest=/etc/nginx/sites-available/default
+  notify: Restart Nginx
