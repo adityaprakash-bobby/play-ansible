@@ -13,3 +13,6 @@ provisioning/files/wp-database.sql
 # Gem packages
 vendor/
 .bundle/
+
+# kitchen
+.kitchen/
